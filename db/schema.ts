@@ -1,13 +1,20 @@
-import { date, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { date, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+export const userRoleEnum = pgEnum("user_role", ["admin", "manager", "user"]);
+
+export const organizations = pgTable("organizations", {
+  id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-export const tickets = pgTable("tickets", {
-  id: serial("id").primaryKey(),
+export const users = pgTable("users", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orgId: uuid("org_id")
+    .notNull()
+    .references(() => organizations.id),
   name: text("name").notNull(),
-  description: text("description"),
-  date: date("date"),
+  email: text("email").notNull(),
+  role: userRoleEnum("role").notNull().default("user"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

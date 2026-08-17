@@ -8,6 +8,20 @@
       "when": 1786903431649,
       "tag": "0000_superb_micromax",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786989335570,
+      "tag": "0002_safe_shadow_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786989396517,
+      "tag": "0003_glamorous_masque",
+      "breakpoints": true
     }
   ]
 }

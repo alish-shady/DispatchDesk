@@ -14,7 +14,7 @@ export default function Page() {
     const password = formData.get("password") as string;
     const { data, error } = await authClient.signIn.email({ email, password });
     if (error) {
-      throw new Error("sex");
+      throw new Error("error");
     }
     router.replace("/dashboard");
   }

@@ -18,6 +18,7 @@ export async function signUp(input: { name: string; email: string; password: str
       keepCurrentActiveOrganization: false,
     },
   });
+
   await db.insert(organizations).values({ id: organization.id, name: organization.name }).onConflictDoNothing();
   await db
     .insert(users)

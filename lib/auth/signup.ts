@@ -1,7 +1,6 @@
 import { db } from "@/db/db";
 import { auth } from "./auth";
 import { organizations, users } from "@/db/schema";
-
 export async function signUp(input: { name: string; email: string; password: string; orgName: string }) {
   const { user } = await auth.api.signUpEmail({
     body: {
@@ -22,6 +21,6 @@ export async function signUp(input: { name: string; email: string; password: str
   await db.insert(organizations).values({ id: organization.id, name: organization.name }).onConflictDoNothing();
   await db
     .insert(users)
-    .values({ id: user.id, name: user.name, orgId: organization.id, email: user.email })
+    .values({ id: user.id, name: user.name, orgId: organization.id, email: user.email, role: "admin" })
     .onConflictDoNothing();
 }

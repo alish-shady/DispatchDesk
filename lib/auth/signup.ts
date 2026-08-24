@@ -1,6 +1,7 @@
 import { db } from "@/db/db";
 import { auth } from "./auth";
 import { organizations, users } from "@/db/schema";
+import { headers } from "next/headers";
 export async function signUp(input: { name: string; email: string; password: string; orgName: string }) {
   const { user } = await auth.api.signUpEmail({
     body: {
@@ -17,7 +18,12 @@ export async function signUp(input: { name: string; email: string; password: str
       keepCurrentActiveOrganization: false,
     },
   });
-
+  await auth.api.setActiveOrganization({
+    body: {
+      organizationId: organization.id,
+    },
+    headers: await headers(),
+  });
   await db.insert(organizations).values({ id: organization.id, name: organization.name }).onConflictDoNothing();
   await db
     .insert(users)

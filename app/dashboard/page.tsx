@@ -8,17 +8,15 @@ export default async function Page() {
     headers: await headers(),
   });
   if (!session) redirect("/sign-in", RedirectType.replace);
-  console.log({ session });
-  const data = await auth.api.listMembers({
-    query: {
-      organizationId: "hscLY4Ljgv6f5jaMUcHJBum8rlPuwXnr",
-      limit: 100,
-      offset: 0,
-      sortBy: "createdAt",
-    },
-    headers: await headers(),
-  });
-  console.log({ data, session });
+  // const data = await auth.api.listMembers({
+  //   query: {
+  //     organizationId: "hscLY4Ljgv6f5jaMUcHJBum8rlPuwXnr",
+  //     limit: 100,
+  //     offset: 0,
+  //     sortBy: "createdAt",
+  //   },
+  //   headers: await headers(),
+  // });
   return (
     <div className="grid grid-cols-1">
       Dashboard

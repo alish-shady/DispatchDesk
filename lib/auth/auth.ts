@@ -10,5 +10,27 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
   },
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const organization = await auth.api.createOrganization({
+            body: {
+              name: "dfsadfsaadfs",
+              slug: `${"fadsdfsadfs".toLocaleLowerCase()}-org`,
+              userId: session.userId,
+              keepCurrentActiveOrganization: false,
+            },
+          });
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: organization?.id,
+            },
+          };
+        },
+      },
+    },
+  },
   plugins: [organization()],
 });

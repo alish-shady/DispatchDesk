@@ -3,13 +3,14 @@ import { auth } from "./auth";
 import { organizations, users } from "@/db/schema";
 import { headers } from "next/headers";
 export async function signUp(input: { name: string; email: string; password: string; orgName: string }) {
-  const { user } = await auth.api.signUpEmail({
+  const { user, token } = await auth.api.signUpEmail({
     body: {
       name: input.name,
       email: input.email,
       password: input.password,
     },
   });
+
   const organization = await auth.api.createOrganization({
     body: {
       name: input.orgName,
@@ -18,15 +19,43 @@ export async function signUp(input: { name: string; email: string; password: str
       keepCurrentActiveOrganization: false,
     },
   });
+
+  // await setActiveOrganization(organization.id, organization.slug, token);
+  await syncCustomSchema(user, organization);
+}
+
+async function setActiveOrganization(organizationId: string, organizationSlug: string, token: string | null) {
+  const reqHeaders = new Headers(await headers());
+  reqHeaders.set("Authorization", `Bearer ${token}`);
   await auth.api.setActiveOrganization({
     body: {
-      organizationId: organization.id,
+      organizationId,
+      organizationSlug,
     },
-    headers: await headers(),
+    headers: reqHeaders,
   });
-  await db.insert(organizations).values({ id: organization.id, name: organization.name }).onConflictDoNothing();
+}
+
+async function syncCustomSchema(
+  user: { id: string; name: string; email: string },
+  organization: { id: string; name: string },
+) {
+  await db
+    .insert(organizations)
+    .values({
+      id: organization.id,
+      name: organization.name,
+    })
+    .onConflictDoNothing();
+
   await db
     .insert(users)
-    .values({ id: user.id, name: user.name, orgId: organization.id, email: user.email, role: "admin" })
+    .values({
+      id: user.id,
+      name: user.name,
+      orgId: organization.id,
+      email: user.email,
+      role: "admin",
+    })
     .onConflictDoNothing();
 }

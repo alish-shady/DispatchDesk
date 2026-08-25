@@ -8,7 +8,7 @@ export default async function Page() {
     headers: await headers(),
   });
   if (!session) redirect("/sign-in", RedirectType.replace);
-  console.log(session);
+
   return (
     <div className="grid grid-cols-1">
       Dashboard

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
   const router = useRouter();
+  const { isPending, data } = authClient.useActiveOrganization();
+  console.log(isPending, data);
   async function handleSignout() {
     await authClient.signOut({
       fetchOptions: {

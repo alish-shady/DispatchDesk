@@ -5,6 +5,7 @@ import { organization } from "better-auth/plugins";
 import * as schema from "@/auth-schema";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { sendOrganizationInvitation } from "../email/email-send";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
@@ -34,5 +35,14 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [organization()],
+  plugins: [
+    organization({
+      async sendInvitationEmail(data) {
+        const inviteId = data.id;
+        const inviterName = data.inviter.user.name;
+        const orgName = data.organization.name;
+        await sendOrganizationInvitation({ inviteId, inviterName, orgName });
+      },
+    }),
+  ],
 });

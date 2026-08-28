@@ -1,11 +1,23 @@
 import { db } from "@/db/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { organization } from "better-auth/plugins";
+import { createAccessControl, organization } from "better-auth/plugins";
 import * as schema from "@/auth-schema";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { sendOrganizationInvitation } from "../email/email-send";
+import { defaultStatements, adminAc, ownerAc, memberAc } from "better-auth/plugins/organization/access";
+
+const coreAc = createAccessControl(defaultStatements);
+const admin = coreAc.newRole({
+  ...ownerAc.statements,
+});
+const manager = coreAc.newRole({
+  ...adminAc.statements,
+});
+const user = coreAc.newRole({
+  ...memberAc.statements,
+});
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
@@ -40,6 +52,9 @@ export const auth = betterAuth({
   },
   plugins: [
     organization({
+      ac: coreAc,
+      roles: { admin, manager, user },
+      creatorRole: "admin",
       async sendInvitationEmail(data) {
         const invitationId = data.id;
         const inviterName = data.inviter.user.name;

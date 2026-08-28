@@ -13,6 +13,9 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: false,
   },
+  middleware: {
+    publicRoutes: ["/dashboard/accept"],
+  },
   databaseHooks: {
     session: {
       create: {
@@ -38,10 +41,10 @@ export const auth = betterAuth({
   plugins: [
     organization({
       async sendInvitationEmail(data) {
-        const inviteId = data.id;
+        const invitationId = data.id;
         const inviterName = data.inviter.user.name;
         const orgName = data.organization.name;
-        await sendOrganizationInvitation({ inviteId, inviterName, orgName });
+        await sendOrganizationInvitation({ invitationId, inviterName, orgName });
       },
     }),
   ],

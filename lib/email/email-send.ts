@@ -1,17 +1,20 @@
 import { EmailTemplate } from "@/components/email/EmailTemplate";
-import { organization } from "better-auth/plugins";
 import { Resend } from "resend";
 
 interface OrganizationInvitationEmailData {
-  inviteId: string;
+  invitationId: string;
   inviterName: string;
   orgName: string;
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendOrganizationInvitation({ inviteId, inviterName, orgName }: OrganizationInvitationEmailData) {
-  const inviteLink = `http://localhost:3000/invitations/accept?invitationId=${inviteId}`;
+export async function sendOrganizationInvitation({
+  invitationId,
+  inviterName,
+  orgName,
+}: OrganizationInvitationEmailData) {
+  const inviteLink = `http://localhost:3000/dashboard/accept?invitationId=${invitationId}`;
   const { data: emailData, error } = await resend.emails.send({
     from: "onboarding@resend.dev",
     to: "alishapoori83@gmail.com",
@@ -23,5 +26,4 @@ export async function sendOrganizationInvitation({ inviteId, inviterName, orgNam
       inviteLink,
     }),
   });
-  console.log({ emailData, error });
 }

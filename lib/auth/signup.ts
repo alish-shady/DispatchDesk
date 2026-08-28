@@ -20,20 +20,7 @@ export async function signUp(input: { name: string; email: string; password: str
     },
   });
 
-  // await setActiveOrganization(organization.id, organization.slug, token);
   await syncCustomSchema(user, organization);
-}
-
-async function setActiveOrganization(organizationId: string, organizationSlug: string, token: string | null) {
-  const reqHeaders = new Headers(await headers());
-  reqHeaders.set("Authorization", `Bearer ${token}`);
-  await auth.api.setActiveOrganization({
-    body: {
-      organizationId,
-      organizationSlug,
-    },
-    headers: reqHeaders,
-  });
 }
 
 async function syncCustomSchema(

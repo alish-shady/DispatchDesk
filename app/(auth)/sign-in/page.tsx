@@ -2,11 +2,13 @@
 
 import Home from "@/components/layout/Home";
 import { authClient } from "@/lib/auth/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SubmitEvent } from "react";
 
 export default function Page() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const invitationId = searchParams.get("invitationId");
+
   async function handleSignIn(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -16,7 +18,11 @@ export default function Page() {
     if (error) {
       throw new Error("error");
     }
-    router.replace("/dashboard");
+    if (invitationId) {
+      window.location.href = `/dashboard/accept?invitationId=${invitationId}`;
+    } else {
+      window.location.href = "/dashboard";
+    }
   }
   return (
     <Home>

@@ -32,20 +32,19 @@ export const auth = betterAuth({
     session: {
       create: {
         before: async (session) => {
-          const result = await db
-            .select({
-              userId: users.id,
-              orgId: users.orgId,
-            })
-            .from(users)
-            .where(eq(users.id, session.userId));
-
-          return {
-            data: {
-              ...session,
-              activeOrganizationId: result[0].orgId,
-            },
-          };
+          // const result = await db
+          //   .select({
+          //     userId: users.id,
+          //     orgId: users.orgId,
+          //   })
+          //   .from(users)
+          //   .where(eq(users.id, session.userId));
+          // return {
+          //   data: {
+          //     ...session,
+          //     activeOrganizationId: result[0].orgId,
+          //   },
+          // };
         },
       },
     },

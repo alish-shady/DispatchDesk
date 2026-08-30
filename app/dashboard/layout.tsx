@@ -15,12 +15,12 @@ export default function Layout({ children }: { children: LayoutProps<"/dashboard
     }
   }, [session, sessionPending, router]);
   if (sessionPending) {
-    return <div>Loading...</div>;
+    return <div>Loading... for session</div>;
   }
   if (!session) {
     return null;
   }
-  if (activePending) return <div>Loading...</div>;
+  if (activePending) return <div>Loading... for active org</div>;
   if (!activeOrg) return <OrganizationSelector />;
 
   return children;

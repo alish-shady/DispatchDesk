@@ -6,18 +6,14 @@ import { headers } from "next/headers";
 import { redirect, RedirectType } from "next/navigation";
 
 export default async function Page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) redirect("/sign-in", RedirectType.replace);
   const membersData = await auth.api.listMembers({ headers: await headers() });
-  console.log({ membersData, session });
+  console.log({ membersData });
   return (
     <div className="grid grid-cols-1">
       Dashboard
       <LogoutButton />
       <SendEmailButton />
-      Welcome {session.user.name}
+      Welcome
       {membersData.members.map((member) => (
         <div key={member.userId} className="grid grid-cols-1 my-2">
           <span>userId: {member.userId}</span>

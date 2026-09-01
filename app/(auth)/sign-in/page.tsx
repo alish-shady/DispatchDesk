@@ -2,7 +2,7 @@
 
 import Home from "@/components/layout/Home";
 import { authClient } from "@/lib/auth/auth-client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { SubmitEvent } from "react";
 
 export default function Page() {

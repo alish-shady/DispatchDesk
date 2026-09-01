@@ -1,7 +1,6 @@
 import { db } from "@/db/db";
 import { auth } from "./auth";
 import { organizations, users } from "@/db/schema";
-import { headers } from "next/headers";
 export async function signUp(input: { name: string; email: string; password: string; orgName: string }) {
   const { user, token } = await auth.api.signUpEmail({
     body: {

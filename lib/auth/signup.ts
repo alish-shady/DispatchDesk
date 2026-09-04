@@ -20,6 +20,7 @@ export async function signUp(input: { name: string; email: string; password: str
   });
 
   await syncCustomSchema(user, organization);
+  return { user, organization };
 }
 
 async function syncCustomSchema(

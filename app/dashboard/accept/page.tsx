@@ -29,4 +29,5 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ i
       redirect(`/sign-in?invitationId=${invitationId}`);
     }
   }
+  return <div>accept</div>;
 }

@@ -5,6 +5,8 @@ import { organization } from "better-auth/plugins";
 import * as schema from "@/auth-schema";
 import { sendOrganizationInvitation } from "../email/email-send";
 import { coreAc, admin, manager, user } from "./roles";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: {
@@ -14,27 +16,7 @@ export const auth = betterAuth({
   middleware: {
     publicRoutes: ["/dashboard/accept"],
   },
-  databaseHooks: {
-    session: {
-      create: {
-        before: async (session) => {
-          // const result = await db
-          //   .select({
-          //     userId: users.id,
-          //     orgId: users.orgId,
-          //   })
-          //   .from(users)
-          //   .where(eq(users.id, session.userId));
-          // return {
-          //   data: {
-          //     ...session,
-          //     activeOrganizationId: result[0].orgId,
-          //   },
-          // };
-        },
-      },
-    },
-  },
+
   plugins: [
     organization({
       ac: coreAc,

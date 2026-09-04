@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         jetbrainsMono.variable,
       )}
     >
-      <body className="min-h-full flex px-4 py-8 bg-background items-center">{children}</body>
+      <body className="min-h-full flex px-4 py-8 bg-background">{children}</body>
     </html>
   );
 }

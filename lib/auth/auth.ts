@@ -1,28 +1,10 @@
 import { db } from "@/db/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { createAccessControl, organization } from "better-auth/plugins";
+import { organization } from "better-auth/plugins";
 import * as schema from "@/auth-schema";
-
 import { sendOrganizationInvitation } from "../email/email-send";
-import {
-  defaultStatements,
-  adminAc,
-  ownerAc,
-  memberAc,
-} from "better-auth/plugins/organization/access";
-
-const coreAc = createAccessControl(defaultStatements);
-const admin = coreAc.newRole({
-  ...ownerAc.statements,
-});
-const manager = coreAc.newRole({
-  ...adminAc.statements,
-});
-const user = coreAc.newRole({
-  ...memberAc.statements,
-});
-
+import { coreAc, admin, manager, user } from "./roles";
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: {

@@ -3,7 +3,6 @@ import LogoutButton from "@/components/auth/LogoutButton";
 import SendEmailButton from "@/components/email/SendEmailButton";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { redirect, RedirectType } from "next/navigation";
 
 export default async function Page() {
   const membersData = await auth.api.listMembers({ headers: await headers() });

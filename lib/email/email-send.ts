@@ -20,7 +20,7 @@ export async function sendOrganizationInvitation({
     to: "alishapoori83@gmail.com",
     subject: "Welcome to my world.",
     react: EmailTemplate({
-      firstName: "NNN",
+      firstName: "Hello Sir",
       inviterName,
       teamName: orgName,
       inviteLink,

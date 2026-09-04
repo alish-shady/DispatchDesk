@@ -5,7 +5,7 @@ import { authClient } from "@/lib/auth/auth-client";
 async function sendInvite() {
   const { data, error } = await authClient.organization.inviteMember({
     email: "alishapoori83@gmail.com",
-    role: "member",
+    role: "user",
     resend: true,
   });
   console.log({ dataFromClient: data, error });

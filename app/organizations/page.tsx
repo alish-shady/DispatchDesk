@@ -22,10 +22,9 @@ export default async function Page() {
                 <span className="text-xs">{member.user.email}</span>
               </div>
               <div className="flex gap-2">
-                <span className="p-1 text-[#2563EB] bg-[#EFF6FF] text-xs uppercase">{member.role}</span>
                 <span className="p-1 text-[#16A34A] bg-[#F0FDF4] text-xs uppercase">active</span>
               </div>
-              <ChangeRoleButton memberId={member.id} />
+              <ChangeRoleButton memberId={member.id} memberRole={member.role} />
             </div>
           ))}
         </div>

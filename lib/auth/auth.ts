@@ -5,8 +5,6 @@ import { organization } from "better-auth/plugins";
 import * as schema from "@/auth-schema";
 import { sendOrganizationInvitation } from "../email/email-send";
 import { coreAc, admin, manager, user } from "./roles";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: {

@@ -8,7 +8,6 @@ async function sendInvite() {
     role: "user",
     resend: true,
   });
-  console.log({ dataFromClient: data, error });
 }
 export default function SendEmailButton() {
   return <button onClick={sendInvite}>send</button>;

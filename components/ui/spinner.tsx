@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { SpinnerIcon } from "@phosphor-icons/react";
+import { CircleNotchIcon, SpinnerIcon } from "@phosphor-icons/react";
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
@@ -12,5 +12,15 @@ function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
     />
   );
 }
-
-export { Spinner };
+function SpinnerCircle({ className, ...props }: React.ComponentProps<"svg">) {
+  return (
+    <CircleNotchIcon
+      data-slot="spinner"
+      role="status"
+      aria-label="Loading"
+      className={cn("size-4 animate-spin", className)}
+      {...props}
+    />
+  );
+}
+export { Spinner, SpinnerCircle };

@@ -26,7 +26,7 @@ function SelectTrigger({
   ...props
 }: SelectPrimitive.Trigger.Props & {
   size?: "sm" | "default";
-  isLoading: boolean;
+  isLoading?: boolean;
 }) {
   return (
     <SelectPrimitive.Trigger

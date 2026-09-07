@@ -6,18 +6,24 @@ export function InputField({
   placeholder,
   type,
   name,
+  children,
 }: {
   label: string;
   placeholder: string;
   type: string;
   name: string;
+  children?: Readonly<React.ReactNode> | null;
 }) {
   return (
     <Field>
       <FieldLabel htmlFor={name} className="text-sm uppercase opacity-85">
         {label}
       </FieldLabel>
-      <Input name={name} id={name} type={type} placeholder={placeholder} className="text-sm" />
+      {type === "custom" ? (
+        children
+      ) : (
+        <Input name={name} id={name} type={type} placeholder={placeholder} className="text-sm" />
+      )}
     </Field>
   );
 }

@@ -16,7 +16,7 @@ export default async function Page() {
         </div>
         <div className="grid my-2">
           {membersData.members.map((member) => (
-            <div key={member.userId} className="grid px-6 py-4 bg-card gap-2 border-b">
+            <div key={member.userId} className="grid px-6 py-4 bg-card gap-2 border-b hover:bg-accent duration-200">
               <div className="ml-2 grid">
                 <span className="font-semibold text-base">{member.user.name}</span>
                 <span className="text-xs">{member.user.email}</span>

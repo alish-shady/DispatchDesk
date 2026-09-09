@@ -1,6 +1,7 @@
 import { InputField } from "@/components/common/InputField";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import SendEmailButton from "../email/SendEmailButton";
+import { inviteMemberAction } from "@/app/organizations/actions";
 const items = [
   { value: "admin", label: "Admin" },
   { value: "manager", label: "Manager" },
@@ -15,7 +16,11 @@ export default function InviteMemberModal() {
       </div>
       <div className="grid my-8 px-6 py-4 border-2 border-border">
         <h2 className="uppercase text-xl font-semibold">Invitee&apos;s Info</h2>
-        <form className="grid grid-cols-1 border-y border-y-border gap-2 py-4" id="send-email">
+        <form
+          className="grid grid-cols-1 border-y border-y-border gap-2 py-4"
+          id="send-email"
+          action={inviteMemberAction}
+        >
           <InputField type="email" placeholder="user@test.com" name="userEmail" label="Email" />
           <InputField type="custom" name="orgRole" label="Role" placeholder="Their Role">
             <Select items={items} name="orgRole">
@@ -34,9 +39,7 @@ export default function InviteMemberModal() {
             </Select>
           </InputField>
         </form>
-        <Button type="submit" className="uppercase" form="send-email">
-          Send
-        </Button>
+        <SendEmailButton formId="send-email">Send</SendEmailButton>
       </div>
     </div>
   );

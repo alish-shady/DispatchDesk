@@ -12,4 +12,6 @@ export const user = coreAc.newRole({
   ...memberAc.statements,
 });
 
-export type Role = "admin" | "manager" | "user";
+export const roles = ["admin", "manager", "user"] as const;
+
+export type Role = (typeof roles)[number];

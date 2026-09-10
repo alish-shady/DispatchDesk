@@ -1,12 +1,4 @@
-import { InputField } from "@/components/common/InputField";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SendEmailButton from "../email/SendEmailButton";
-import { inviteMemberAction } from "@/app/organizations/actions";
-const items = [
-  { value: "admin", label: "Admin" },
-  { value: "manager", label: "Manager" },
-  { value: "user", label: "User" },
-];
+import InviteMemberForm from "./InviteMemberForm";
 export default function InviteMemberModal() {
   return (
     <div className="z-50 w-auto h-full absolute right-0 top-0 left-0 bg-background px-4 py-8">
@@ -16,30 +8,7 @@ export default function InviteMemberModal() {
       </div>
       <div className="grid my-8 px-6 py-4 border-2 border-border">
         <h2 className="uppercase text-xl font-semibold">Invitee&apos;s Info</h2>
-        <form
-          className="grid grid-cols-1 border-y border-y-border gap-2 py-4"
-          id="send-email"
-          action={inviteMemberAction}
-        >
-          <InputField type="email" placeholder="user@test.com" name="userEmail" label="Email" />
-          <InputField type="custom" name="orgRole" label="Role" placeholder="Their Role">
-            <Select items={items} name="orgRole">
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Their Role" />
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false}>
-                <SelectGroup>
-                  {items.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </InputField>
-        </form>
-        <SendEmailButton formId="send-email">Send</SendEmailButton>
+        <InviteMemberForm />
       </div>
     </div>
   );

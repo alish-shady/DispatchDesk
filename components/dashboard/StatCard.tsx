@@ -15,7 +15,7 @@ export default function StatCard({
 }) {
   return (
     <label
-      className="relative hover:bg-secondary flex justify-between px-6 py-4 bg-card duration-200 cursor-pointer
+      className="relative hover:bg-accent flex justify-between px-6 py-4 bg-card duration-200 cursor-pointer
         before:absolute before:left-0 before:top-0 before:h-full before:w-1
         before:bg-primary before:duration-200 before:content-['']
         before:opacity-0

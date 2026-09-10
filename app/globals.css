@@ -39,6 +39,18 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-status-draft-text: var(--status-draft-text);
+  --color-status-submitted-text: var(--status-submitted-text);
+  --color-status-in-review-text: var(--status-in-review-text);
+  --color-status-approved-text: var(--status-approved-text);
+  --color-status-rejected-text: var(--status-rejected-text);
+  --color-status-cancelled-text: var(--status-cancelled-text);
+  --color-status-draft-bg: var(--status-draft-bg);
+  --color-status-submitted-bg: var(--status-submitted-bg);
+  --color-status-in-review-bg: var(--status-in-review-bg);
+  --color-status-approved-bg: var(--status-approved-bg);
+  --color-status-rejected-bg: var(--status-rejected-bg);
+  --color-status-cancelled-bg: var(--status-cancelled-bg);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -81,6 +93,20 @@
   --sidebar-accent-foreground: #4f46e5;
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #4f46e5;
+
+  --status-draft-text: #475569;
+  --status-submitted-text: #2563eb;
+  --status-in-review-text: #d97706;
+  --status-approved-text: #16a34a;
+  --status-rejected-text: #dc2626;
+  --status-cancelled-text: #64748b;
+
+  --status-draft-bg: #f1f5f9;
+  --status-submitted-bg: #eff6ff;
+  --status-in-review-bg: #fffbeb;
+  --status-approved-bg: #f0fdf4;
+  --status-rejected-bg: #fef2f2;
+  --status-cancelled-bg: #f8fafc;
 }
 .dark {
   --background: #0f172a;
@@ -114,6 +140,13 @@
   --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #334155;
   --sidebar-ring: #6366f1;
+
+  --status-draft-text: #475569;
+  --status-submitted-text: #3b82f6;
+  --status-in-review-text: #f59e0b;
+  --status-approved-text: #22c55e;
+  --status-rejected-text: #f87171;
+  --status-cancelled-text: #94a3b8;
 }
 
 @layer base {

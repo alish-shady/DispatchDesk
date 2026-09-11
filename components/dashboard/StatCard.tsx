@@ -19,7 +19,7 @@ export default function StatCard({
         before:absolute before:left-0 before:top-0 before:h-full before:w-1
         before:bg-primary before:duration-200 before:content-['']
         before:opacity-0
-        has-[:checked]:before:opacity-100"
+        has-checked:before:opacity-100"
     >
       <input type="radio" name={name} defaultChecked={defaultChecked} className="sr-only" />
       <div className="grid gap-2">

@@ -11,6 +11,7 @@ export default function SignInForm() {
   const invitationId = searchParams.get("invitationId");
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const { refetch: refetchActiveOrg } = authClient.useActiveOrganization();
   async function handleSignIn(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
@@ -19,6 +20,7 @@ export default function SignInForm() {
     const password = formData.get("password") as string;
     try {
       const { data, error } = await authClient.signIn.email({ email, password });
+      refetchActiveOrg();
       if (error) {
         throw new Error("error");
       }

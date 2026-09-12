@@ -9,6 +9,8 @@ export default function Layout({ children }: { children: LayoutProps<"/dashboard
   const router = useRouter();
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const { data: activeOrg, isPending: activePending } = authClient.useActiveOrganization();
+  console.log("session:", session);
+  console.log("active org:", activeOrg);
   useEffect(() => {
     if (!sessionPending && !session) {
       router.replace("/sign-in");
@@ -22,6 +24,6 @@ export default function Layout({ children }: { children: LayoutProps<"/dashboard
   }
   if (activePending) return <div>Loading... for active org</div>;
   if (!activeOrg) return <OrganizationSelector />;
-
+  console.log({ activeOrg });
   return children;
 }

@@ -5,7 +5,6 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 export default async function Page() {
   const membersData = await auth.api.listMembers({ headers: await headers() });
-  console.log({ membersData });
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">

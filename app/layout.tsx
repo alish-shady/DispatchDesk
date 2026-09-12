@@ -35,9 +35,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         jetbrainsMono.variable,
       )}
     >
-      <body className="min-h-full bg-background">
+      <body className="min-h-dvh flex flex-col bg-background">
         <TopBar />
-        <div className="px-4 py-8">{children}</div>
+        <div className="flex-1 px-4 py-8">{children}</div>
         <BottomNavigation />
       </body>
     </html>

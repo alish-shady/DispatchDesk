@@ -1,29 +1,6 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import OrganizationSelector from "@/components/organization/OrganizationSelector";
-import { authClient } from "@/lib/auth/auth-client";
+import ProtectedRoute from "@/components/dashboard/ProtectedRoute";
+import OrganizationsList from "@/components/organization/OrganizationsList";
 
 export default function Layout({ children }: { children: LayoutProps<"/dashboard"> }) {
-  const router = useRouter();
-  const { data: session, isPending: sessionPending } = authClient.useSession();
-  const { data: activeOrg, isPending: activePending } = authClient.useActiveOrganization();
-  console.log("session:", session);
-  console.log("active org:", activeOrg);
-  useEffect(() => {
-    if (!sessionPending && !session) {
-      router.replace("/sign-in");
-    }
-  }, [session, sessionPending, router]);
-  if (sessionPending) {
-    return <div>Loading... for session</div>;
-  }
-  if (!session) {
-    return null;
-  }
-  if (activePending) return <div>Loading... for active org</div>;
-  if (!activeOrg) return <OrganizationSelector />;
-  console.log({ activeOrg });
-  return children;
+  return <ProtectedRoute OrganizationLists={<OrganizationsList />}>{children}</ProtectedRoute>;
 }

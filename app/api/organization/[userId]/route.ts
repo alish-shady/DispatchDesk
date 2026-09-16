@@ -1,6 +1,7 @@
 import { member, organization } from "@/auth-schema";
 import { db } from "@/db/db";
 import { auth } from "@/lib/auth/auth";
+import { GetOrganizationsApiResponse } from "@/types/api";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
@@ -12,7 +13,7 @@ export async function GET() {
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const organizations = await db
+  const organizations: GetOrganizationsApiResponse = await db
     .select({
       id: organization.id,
       name: organization.name,

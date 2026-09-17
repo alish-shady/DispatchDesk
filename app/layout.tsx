@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import BottomNavigation from "@/components/layout/BottomNavigation";
-import TopBar from "@/components/layout/TopBar";
+import ProtectedRootLayout from "@/components/layout/ProtectedRootLayout";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -36,9 +35,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-dvh flex flex-col bg-background">
-        <TopBar />
-        <div className="flex-1 px-4 py-8">{children}</div>
-        <BottomNavigation />
+        <ProtectedRootLayout>
+          <div className="flex-1 px-4 py-8">{children}</div>
+        </ProtectedRootLayout>
       </body>
     </html>
   );

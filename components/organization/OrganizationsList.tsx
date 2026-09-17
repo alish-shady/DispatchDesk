@@ -12,10 +12,16 @@ export default async function OrganizationsList() {
   const organizations = await getOrganizationsForUser(session.user.id);
 
   return (
-    <div className="grid grid-cols-1 justify-items-center h-screen">
-      {organizations.map((org) => {
-        return <OrganizationSelector key={org.id} org={org} />;
-      })}
+    <div className="flex flex-col gap-4 min-h-screen">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-semibold uppercase">Organizations List</h2>
+        <div>Select the organization you want to join.</div>
+      </div>
+      <div className="grid">
+        {organizations.map((org) => {
+          return <OrganizationSelector key={org.id} org={org} />;
+        })}
+      </div>
     </div>
   );
 }

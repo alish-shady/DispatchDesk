@@ -1,11 +1,11 @@
 "use client";
 import { switchOrgAction } from "@/app/dashboard/actions";
+import type { OrganizationWithRole } from "@/db/queries";
 import { authClient } from "@/lib/auth/auth-client";
-import { GetOrganizationsApiResponse } from "@/types/api";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
-export default function OrganizationSelector({ org }: { org: GetOrganizationsApiResponse[number] }) {
+export default function OrganizationSelector({ org }: { org: OrganizationWithRole }) {
   const [isPending, startTransition] = useTransition();
   const { refetch: refetchActiveOrg } = authClient.useActiveOrganization();
   const router = useRouter();

@@ -22,12 +22,12 @@ export default function ProtectedRoute({
     }
   }, [session, sessionPending, router]);
   if (sessionPending) {
-    return <div>Loading... for session</div>;
+    return <div>Loading for session</div>;
   }
   if (!session) {
     return null;
   }
-  if (activePending) return <div>Loading... for active org</div>;
+  if (activePending) return <div>Loading for active org</div>;
   if (!activeOrg) return OrganizationLists;
   console.log({ activeOrg });
   return <>{children}</>;

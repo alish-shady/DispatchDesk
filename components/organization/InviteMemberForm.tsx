@@ -4,8 +4,8 @@ import { useActionState } from "react";
 import { InputField } from "@/components/common/InputField";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { inviteMemberAction } from "@/app/organizations/actions";
-import type { InvitationActionState } from "@/app/organizations/actions";
+import { inviteMemberAction } from "@/app/(protected)/organizations/actions";
+import type { InvitationActionState } from "@/app/(protected)/organizations/actions";
 const items = [
   { value: "admin", label: "Admin" },
   { value: "manager", label: "Manager" },

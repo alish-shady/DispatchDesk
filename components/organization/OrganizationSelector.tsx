@@ -1,5 +1,5 @@
 "use client";
-import { switchOrgAction } from "@/app/dashboard/actions";
+import { switchOrgAction } from "@/app/(protected)/dashboard/actions";
 import type { OrganizationWithRole } from "@/db/queries";
 import { authClient } from "@/lib/auth/auth-client";
 import { Button } from "@/components/ui/button";

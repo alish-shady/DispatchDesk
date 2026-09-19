@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import ProtectedRootLayout from "@/components/layout/ProtectedRootLayout";
+import ProtectedRootLayout from "@/components/layout/ProtectedRouteRootLayout";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 

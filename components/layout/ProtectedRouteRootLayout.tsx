@@ -4,7 +4,8 @@ import TopBar from "./TopBar";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function ProtectedRootLayout({ children }: { children: React.ReactNode }) {
+export default async function ProtectedRouteRootLayout({ children }: { children: React.ReactNode }) {
+  console.log("root layout called");
   const session = await auth.api.getSession({
     headers: await headers(),
   });

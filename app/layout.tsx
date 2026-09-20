@@ -34,11 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         jetbrainsMono.variable,
       )}
     >
-      <body className="min-h-dvh flex flex-col bg-background">
-        <ProtectedRootLayout>
-          <div className="flex-1 px-4 py-8">{children}</div>
-        </ProtectedRootLayout>
-      </body>
+      <body className="min-h-dvh flex flex-col bg-background">{children}</body>
     </html>
   );
 }

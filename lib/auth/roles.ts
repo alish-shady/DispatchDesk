@@ -7,6 +7,7 @@ export const admin = coreAc.newRole({
 });
 export const manager = coreAc.newRole({
   ...adminAc.statements,
+  member: ["create", "delete", "update"],
 });
 export const user = coreAc.newRole({
   ...memberAc.statements,
@@ -15,3 +16,7 @@ export const user = coreAc.newRole({
 export const roles = ["admin", "manager", "user"] as const;
 
 export type Role = (typeof roles)[number];
+
+export function isRole(role: string): role is Role {
+  return roles.includes(role as Role);
+}

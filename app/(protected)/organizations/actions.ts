@@ -7,6 +7,8 @@ import { member } from "@/auth-schema";
 import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { Member } from "better-auth/plugins";
+import { canUpdateRole } from "@/lib/utils";
 type ActionState<T = void> = { success: true; data: T } | { success: false; error: string };
 export type InvitationActionState = ActionState<Awaited<ReturnType<typeof auth.api.createInvitation>>>;
 function isRole(value: unknown): value is Role {
@@ -43,10 +45,18 @@ export async function updateMemberRoleAction(
   const { memberId, role } = input;
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) throw new Error("Unauthorized");
+  const userRole = (await db.query.member.findFirst({ where: eq(member.id, session.user.id) })) as Member;
   const target = await db.query.member.findFirst({
     where: eq(member.id, memberId),
   });
   if (!target) throw new Error("Member not found");
+  const { verdict } = canUpdateRole({
+    targetId: memberId,
+    sourceId: session.user.id,
+    sourceRole: userRole.role,
+    targetRole: target.role,
+  });
+  if (verdict) return { error: verdict };
 
   try {
     await auth.api.updateMemberRole({

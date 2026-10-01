@@ -44,12 +44,12 @@ export async function updateMemberRoleAction(
 ) {
   const { memberId, role } = input;
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { error: "Unauthorized" };
   const userRole = (await db.query.member.findFirst({ where: eq(member.id, session.user.id) })) as Member;
   const target = await db.query.member.findFirst({
     where: eq(member.id, memberId),
   });
-  if (!target) throw new Error("Member not found");
+  if (!target) return { error: "Member not found" };
   const { verdict } = canUpdateRole({
     targetId: memberId,
     sourceId: session.user.id,

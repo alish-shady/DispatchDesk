@@ -12,7 +12,7 @@ export const requestStatusEnum = pgEnum("request_status", [
   "cancelled",
 ]);
 export const approvalStepStatusEnum = pgEnum("approval_step_status", ["pending", "approved", "rejected"]);
-export const activityActionsEnum = pgEnum("actions", ["submitted", "approved", "rejected", "cancelled"]);
+export const activityActionsEnum = pgEnum("activity_actions", ["submitted", "approved", "rejected", "cancelled"]);
 
 export const requests = pgTable("requests", {
   id: text("id")
@@ -54,7 +54,6 @@ export const approvalSteps = pgTable(
     decidedAt: timestamp("decided_at", { withTimezone: true }),
     comment: text("comment"),
   },
-
   (table) => ({
     uniqueStepPerRequest: uniqueIndex("approval_steps_request_step_unique").on(table.requestId, table.stepOrder),
   }),

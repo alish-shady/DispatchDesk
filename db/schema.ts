@@ -21,7 +21,7 @@ export const requests = pgTable("requests", {
   type: requestTypeEnum("type").notNull(),
   title: text("title").notNull(),
   description: text("description"),
-  status: requestStatusEnum("status").notNull().default("draft"),
+  status: requestStatusEnum("status").notNull().default("submitted"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()

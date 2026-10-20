@@ -27,10 +27,12 @@ export const TRANSITIONS: Record<RequestStatus, Partial<Record<RequestAction, Re
   submitted: {
     manager_approve: "in_review",
     manager_reject: "rejected",
+    cancel: "cancelled",
   },
   in_review: {
     admin_approve: "approved",
     admin_reject: "rejected",
+    cancel: "cancelled",
   },
   approved: {},
   rejected: {},

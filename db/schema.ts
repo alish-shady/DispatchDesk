@@ -1,18 +1,12 @@
 import { organization, user } from "@/auth-schema";
+import { ACTIVITY_ACTIONS, REQUEST_STATUSES } from "@/lib/request-state-machine";
 import { integer, json, pgEnum, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["admin", "manager", "user"]);
 export const requestTypeEnum = pgEnum("request_type", ["IT Support Request"]);
-export const requestStatusEnum = pgEnum("request_status", [
-  "draft",
-  "submitted",
-  "in_review",
-  "approved",
-  "rejected",
-  "cancelled",
-]);
+export const requestStatusEnum = pgEnum("request_status", REQUEST_STATUSES);
 export const approvalStepStatusEnum = pgEnum("approval_step_status", ["pending", "approved", "rejected"]);
-export const activityActionsEnum = pgEnum("activity_actions", ["submitted", "approved", "rejected", "cancelled"]);
+export const activityActionsEnum = pgEnum("activity_actions", ACTIVITY_ACTIONS);
 
 export const requests = pgTable("requests", {
   id: text("id")
@@ -54,9 +48,7 @@ export const approvalSteps = pgTable(
     decidedAt: timestamp("decided_at", { withTimezone: true }),
     comment: text("comment"),
   },
-  (table) => ({
-    uniqueStepPerRequest: uniqueIndex("approval_steps_request_step_unique").on(table.requestId, table.stepOrder),
-  }),
+  (table) => [uniqueIndex("approval_steps_request_step_unique").on(table.requestId, table.stepOrder)],
 );
 
 export const activityLog = pgTable("activity_log", {

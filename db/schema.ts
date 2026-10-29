@@ -68,3 +68,12 @@ export const activityLog = pgTable("activity_log", {
   metadata: json("metadata"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+export type Request = typeof requests.$inferSelect;
+export type NewRequest = typeof requests.$inferInsert;
+
+export type ApprovalStep = typeof approvalSteps.$inferSelect;
+export type NewApprovalStep = typeof approvalSteps.$inferInsert;
+
+export type ActivityLog = typeof activityLog.$inferSelect;
+export type NewActivityLog = typeof activityLog.$inferInsert;

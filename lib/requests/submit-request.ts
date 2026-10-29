@@ -1,45 +1,35 @@
+// services/requests.ts
 import { db } from "@/db/db";
-import { activityLog, approvalSteps, requests } from "@/db/schema";
-export async function submitRequest() {
-  return db.transaction(async (tx) => {
-    // 1. Create the request and retrieve its generated ID.
-    const [request] = await tx
-      .insert(requests)
-      .values({
-        orgId: "1",
-        requesterId: "1",
-        type: "IT Support Request",
-        title: "test",
-        description: "test",
-        status: "submitted",
-      })
-      .returning();
+import { orgScopedRepo } from "@/lib/requests/queries";
 
-    // 2. Create both approval steps.
-    await tx.insert(approvalSteps).values([
-      {
-        orgId: request.orgId,
-        requestId: request.id,
-        stepOrder: 1,
-        approverRole: "manager",
-        comment: "Request pending manager's approval.",
-      },
-      {
-        orgId: request.orgId,
-        requestId: request.id,
-        stepOrder: 2,
-        approverRole: "admin",
-        comment: "Request pending admin's approval.",
-      },
+export type SubmitRequestInput = {
+  orgId: string;
+  requesterId: string;
+  type: string;
+  title: string;
+  description: string;
+};
+
+export async function submitRequest(input: SubmitRequestInput) {
+  // Authorization belongs here (or in the caller): verify requester is a
+  // member of orgId before writing. e.g. getCurrentUserRole(...) !== null.
+  return db.transaction(async (tx) => {
+    const repo = orgScopedRepo(tx, input.orgId);
+
+    const request = await repo.createRequest({
+      requesterId: input.requesterId,
+      type: "IT Support Request",
+      title: input.title,
+      description: input.description,
+      status: "submitted",
+    });
+
+    await repo.createApprovalSteps(request.id, [
+      { stepOrder: 1, approverRole: "manager", comment: "Pending manager approval." },
+      { stepOrder: 2, approverRole: "admin", comment: "Pending admin approval." },
     ]);
 
-    // 3. Create the submission activity log entry.
-    await tx.insert(activityLog).values({
-      orgId: request.orgId,
-      requestId: request.id,
-      actorId: request.requesterId,
-      action: "submitted",
-    });
+    await repo.logActivity(request.id, request.requesterId, "submitted");
 
     return request;
   });

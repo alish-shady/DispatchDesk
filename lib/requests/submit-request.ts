@@ -1,6 +1,6 @@
 // services/requests.ts
 import { db } from "@/db/db";
-import { orgScopedRepo } from "@/lib/requests/queries";
+import { orgScopedRepo } from "@/lib/requests/repo";
 
 export type SubmitRequestInput = {
   orgId: string;

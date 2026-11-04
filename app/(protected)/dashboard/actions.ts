@@ -1,6 +1,10 @@
 "use server";
 
+import { getActor } from "@/lib/auth/actor";
 import { auth } from "@/lib/auth/auth";
+import { assertCan } from "@/lib/auth/roles";
+import { submitRequest } from "@/lib/requests/submit-request";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export async function switchOrgAction(orgId: string) {
@@ -11,4 +15,20 @@ export async function switchOrgAction(orgId: string) {
     headers: await headers(),
   });
   return { data };
+}
+
+export async function submitRequestAction() {
+  try {
+    const { orgId, role, userId } = await getActor();
+    if (!assertCan(role, { request: ["submit"] })) throw new Error("Not authorized for this action.");
+    const request = await submitRequest({
+      orgId,
+      requesterId: userId,
+      type: "IT Support Request",
+      title: "First request",
+      description: "First request",
+    });
+    revalidatePath("/dashboard");
+    return { ok: true as const, id: request.id };
+  } catch {}
 }

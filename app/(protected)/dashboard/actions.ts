@@ -4,6 +4,7 @@ import { getActor } from "@/lib/auth/actor";
 import { auth } from "@/lib/auth/auth";
 import { assertCan } from "@/lib/auth/roles";
 import { submitRequest } from "@/lib/requests/submit-request";
+import { updateRequest } from "@/lib/requests/update-request";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -30,5 +31,27 @@ export async function submitRequestAction() {
     });
     revalidatePath("/dashboard");
     return { ok: true as const, id: request.id };
-  } catch {}
+  } catch (e) {
+    console.error("submitRequestAction failed", e);
+  }
+}
+
+export async function approveRequestAction() {
+  try {
+    const { orgId, role, userId } = await getActor();
+    if (!assertCan(role, { request: ["approve"] })) throw new Error("Not authorized for this action.");
+    await updateRequest({ orgId, requestId: "1", action: "approve", actorRole: role });
+  } catch (e) {
+    console.error("approveRequestAction failed", e);
+  }
+}
+
+export async function rejectRequestAction() {
+  try {
+    const { orgId, role, userId } = await getActor();
+    if (!assertCan(role, { request: ["reject"] })) throw new Error("Not authorized for this action.");
+    await updateRequest({ orgId, requestId: "1", action: "reject", actorRole: role });
+  } catch (e) {
+    console.error("rejectRequestAction failed", e);
+  }
 }

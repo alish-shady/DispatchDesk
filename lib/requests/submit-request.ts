@@ -11,8 +11,6 @@ export type SubmitRequestInput = {
 };
 
 export async function submitRequest(input: SubmitRequestInput) {
-  // Authorization belongs here (or in the caller): verify requester is a
-  // member of orgId before writing. e.g. getCurrentUserRole(...) !== null.
   return db.transaction(async (tx) => {
     const repo = orgScopedRepo(tx, input.orgId);
 

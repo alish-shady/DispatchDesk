@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db/db";
 import { activityLog, approvalSteps, requests, type Request, type ApprovalStep } from "@/db/schema";
-import { ActivityAction } from "@/lib/request-state-machine";
+import { ActivityAction, RequestStatus, StepStatus } from "@/lib/request-state-machine";
 
 export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type Executor = typeof db | Transaction;
@@ -19,7 +19,14 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .returning();
       return row;
     },
-
+    async updateRequestStatus(id: string, from: RequestStatus, to: RequestStatus): Promise<Request | null> {
+      const [row] = await exec
+        .update(requests)
+        .set({ status: to })
+        .where(and(eq(requests.orgId, orgId), eq(requests.id, id), eq(requests.status, from)))
+        .returning();
+      return row ?? null;
+    },
     async getRequest(id: string): Promise<Request | null> {
       const [row] = await exec
         .select()
@@ -35,7 +42,19 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .values(steps.map((s) => ({ ...s, orgId, requestId })))
         .returning();
     },
-
+    async decideApprovalStep(
+      stepId: string,
+      decision: StepStatus,
+      approverId: string,
+      comment?: string,
+    ): Promise<ApprovalStep | null> {
+      const [row] = await exec
+        .update(approvalSteps)
+        .set({ status: decision, decidedBy: approverId, decidedAt: new Date(), comment })
+        .where(and(eq(approvalSteps.orgId, orgId), eq(approvalSteps.id, stepId), eq(approvalSteps.status, "pending")))
+        .returning();
+      return row ?? null;
+    },
     async listApprovalSteps(requestId: string): Promise<ApprovalStep[]> {
       return exec
         .select()
@@ -43,7 +62,21 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .where(and(eq(approvalSteps.orgId, orgId), eq(approvalSteps.requestId, requestId)))
         .orderBy(approvalSteps.stepOrder);
     },
-
+    async getPendingStep(requestId: string): Promise<ApprovalStep | null> {
+      const [row] = await exec
+        .select()
+        .from(approvalSteps)
+        .where(
+          and(
+            eq(approvalSteps.orgId, orgId),
+            eq(approvalSteps.requestId, requestId),
+            eq(approvalSteps.status, "pending"),
+          ),
+        )
+        .orderBy(approvalSteps.stepOrder)
+        .limit(1);
+      return row ?? null;
+    },
     async logActivity(requestId: string, actorId: string, action: ActivityAction) {
       await exec.insert(activityLog).values({ orgId, requestId, actorId, action });
     },

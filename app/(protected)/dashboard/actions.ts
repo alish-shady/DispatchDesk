@@ -39,7 +39,6 @@ export async function submitRequestAction() {
 export async function approveRequestAction() {
   try {
     const { orgId, role, userId } = await getActor();
-    if (!assertCan(role, { request: ["approve"] })) throw new Error("Not authorized for this action.");
     await updateRequest({ orgId, requestId: "1", action: "approve", actorRole: role, actorId: userId });
   } catch (e) {
     console.error("approveRequestAction failed", e);
@@ -49,7 +48,6 @@ export async function approveRequestAction() {
 export async function rejectRequestAction() {
   try {
     const { orgId, role, userId } = await getActor();
-    if (!assertCan(role, { request: ["reject"] })) throw new Error("Not authorized for this action.");
     await updateRequest({ orgId, requestId: "1", action: "reject", actorRole: role, actorId: userId });
   } catch (e) {
     console.error("rejectRequestAction failed", e);

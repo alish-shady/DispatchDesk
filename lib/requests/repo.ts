@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db/db";
 import { activityLog, approvalSteps, requests, type Request, type ApprovalStep } from "@/db/schema";
 import { ActivityAction, RequestStatus, StepStatus } from "@/lib/request-state-machine";
+import { Role } from "@/lib/auth/roles";
 
 export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type Executor = typeof db | Transaction;
@@ -27,6 +28,7 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .returning();
       return row ?? null;
     },
+
     async getRequest(id: string): Promise<Request | null> {
       const [row] = await exec
         .select()
@@ -55,6 +57,25 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .returning();
       return row ?? null;
     },
+    async terminateApprovalSteps(
+      requestId: string,
+      decision: Exclude<StepStatus, "pending" | "approved">,
+      approverId: string,
+      comment?: string,
+    ) {
+      const [row] = await exec
+        .update(approvalSteps)
+        .set({ status: decision, decidedBy: approverId, decidedAt: new Date(), comment })
+        .where(
+          and(
+            eq(approvalSteps.orgId, orgId),
+            eq(approvalSteps.requestId, requestId),
+            eq(approvalSteps.status, "pending"),
+          ),
+        )
+        .returning();
+      return row ?? null;
+    },
     async listApprovalSteps(requestId: string): Promise<ApprovalStep[]> {
       return exec
         .select()
@@ -77,8 +98,13 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .limit(1);
       return row ?? null;
     },
-    async logActivity(requestId: string, actorId: string, action: ActivityAction) {
-      await exec.insert(activityLog).values({ orgId, requestId, actorId, action });
+    async logActivity(
+      requestId: string,
+      actorId: string,
+      action: ActivityAction,
+      metadata: { stepOrder: number; role: Role },
+    ) {
+      await exec.insert(activityLog).values({ orgId, requestId, actorId, action, metadata });
     },
   };
 }

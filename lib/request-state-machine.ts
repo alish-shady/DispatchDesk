@@ -1,3 +1,5 @@
+import { Role } from "@/lib/auth/roles";
+
 export const REQUEST_STATUSES = ["draft", "submitted", "in_review", "approved", "rejected", "cancelled"] as const;
 export const REQUEST_ACTIONS = ["submit", "cancel", "approve", "reject"] as const;
 export const ACTIVITY_ACTIONS = ["submitted", "approved", "rejected", "cancelled"] as const;
@@ -36,6 +38,8 @@ export const TRANSITIONS: Record<RequestStatus, Partial<Record<RequestAction, Re
   rejected: {},
   cancelled: {},
 };
+
+export const APPROVAL_CHAIN = ["manager", "admin"] as const satisfies readonly Role[];
 
 export function canTransition(from: RequestStatus, action: RequestAction): boolean {
   return nextStatus(from, action) !== undefined;

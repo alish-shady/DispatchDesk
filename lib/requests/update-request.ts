@@ -1,12 +1,6 @@
 import { db } from "@/db/db";
 import { orgScopedRepo } from "@/lib/requests/repo";
-import {
-  ACTION_TO_ACTIVITY,
-  ACTION_TO_STEP_STATUS,
-  canTransition,
-  nextStatus,
-  RequestAction,
-} from "@/lib/request-state-machine";
+import { ACTION_TO_ACTIVITY, ACTION_TO_STEP_STATUS, nextStatus, RequestAction } from "@/lib/request-state-machine";
 import { assertCan, Role } from "@/lib/auth/roles";
 
 export type UpdateRequestInput = {
@@ -27,8 +21,7 @@ export async function updateRequest(input: UpdateRequestInput) {
     if (!next) throw new Error("Invalid action.");
     const pendingStep = await repo.getPendingStep(request.id);
     if (!pendingStep) throw new Error("Request doesn't have any pending step.");
-    if (!canTransition(request.status, input.action) || pendingStep.approverRole !== input.actorRole)
-      throw new Error("Request can't be updated with the requested transition.");
+    if (pendingStep.approverRole !== input.actorRole) throw new Error("Not authorized for this action.");
     //approve or reject the request
     const updated = await repo.updateRequestStatus(request.id, request.status, next);
     if (!updated) throw new Error("Couldn't be modified.");
@@ -36,7 +29,7 @@ export async function updateRequest(input: UpdateRequestInput) {
     const decision = ACTION_TO_STEP_STATUS[input.action];
     const step = await repo.decideApprovalStep(pendingStep.id, decision, input.actorId);
     if (!step) throw new Error("Couldn't update the steps.");
-    if (decision === "rejected") await repo.terminateApprovalSteps(request.id, decision, input.actorId);
+    if (decision === "rejected") await repo.terminatePendingSteps(request.id);
     //log activity
     const activityAction = ACTION_TO_ACTIVITY[input.action];
     await repo.logActivity(request.id, input.actorId, activityAction, {

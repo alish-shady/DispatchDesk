@@ -1,16 +1,20 @@
 // services/requests.ts
 import { db } from "@/db/db";
 import { orgScopedRepo } from "@/lib/requests/repo";
+import { assertCan, Role } from "@/lib/auth/roles";
+import { APPROVAL_CHAIN } from "../request-state-machine";
 
 export type SubmitRequestInput = {
   orgId: string;
   requesterId: string;
+  requesterRole: Role;
   type: string;
   title: string;
-  description: string;
+  description?: string;
 };
 
 export async function submitRequest(input: SubmitRequestInput) {
+  if (!assertCan(input.requesterRole, { request: ["submit"] })) throw new Error("Not authorized for this action.");
   return db.transaction(async (tx) => {
     const repo = orgScopedRepo(tx, input.orgId);
 
@@ -22,12 +26,12 @@ export async function submitRequest(input: SubmitRequestInput) {
       status: "submitted",
     });
 
-    await repo.createApprovalSteps(request.id, [
-      { stepOrder: 1, approverRole: "manager", comment: "Pending manager approval." },
-      { stepOrder: 2, approverRole: "admin", comment: "Pending admin approval." },
-    ]);
+    await repo.createApprovalSteps(
+      request.id,
+      APPROVAL_CHAIN.map((role, i) => ({ stepOrder: i + 1, approverRole: role })),
+    );
 
-    await repo.logActivity(request.id, request.requesterId, "submitted");
+    await repo.logActivity(request.id, input.requesterId, "submitted");
 
     return request;
   });

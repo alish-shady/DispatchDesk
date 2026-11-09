@@ -50,6 +50,13 @@
       "when": 1791640551665,
       "tag": "0007_plain_bloodscream",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794242130678,
+      "tag": "0008_common_polaris",
+      "breakpoints": true
     }
   ]
 }

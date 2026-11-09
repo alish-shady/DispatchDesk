@@ -21,10 +21,10 @@ export async function switchOrgAction(orgId: string) {
 export async function submitRequestAction() {
   try {
     const { orgId, role, userId } = await getActor();
-    if (!assertCan(role, { request: ["submit"] })) throw new Error("Not authorized for this action.");
     const request = await submitRequest({
       orgId,
       requesterId: userId,
+      requesterRole: role,
       type: "IT Support Request",
       title: "First request",
       description: "First request",

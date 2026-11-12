@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 import { getCurrentUserRole } from "@/db/queries";
 import { headers } from "next/headers";
 import { isRole } from "./roles";

@@ -3,6 +3,7 @@ import { db } from "@/db/db";
 import { orgScopedRepo } from "@/lib/requests/repo";
 import { assertCan, Role } from "@/lib/auth/roles";
 import { APPROVAL_CHAIN } from "../request-state-machine";
+import { AppError } from "@/lib/errors";
 
 export type SubmitRequestInput = {
   orgId: string;
@@ -14,7 +15,8 @@ export type SubmitRequestInput = {
 };
 
 export async function submitRequest(input: SubmitRequestInput) {
-  if (!assertCan(input.requesterRole, { request: ["submit"] })) throw new Error("Not authorized for this action.");
+  if (!assertCan(input.requesterRole, { request: ["submit"] }))
+    throw new AppError("FORBIDDEN", "You don't have permission to submit requests.");
   return db.transaction(async (tx) => {
     const repo = orgScopedRepo(tx, input.orgId);
 

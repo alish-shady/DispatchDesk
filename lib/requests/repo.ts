@@ -17,6 +17,7 @@ export function orgScopedRepo(exec: Executor, orgId: string) {
         .insert(requests)
         .values({ ...values, orgId })
         .returning();
+      if (!row) throw new Error("Insert into requests returned no row.");
       return row;
     },
     async updateRequestStatus(id: string, from: RequestStatus, to: RequestStatus): Promise<Request | null> {
